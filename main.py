@@ -32,7 +32,7 @@ def init_db():
 
 # --- Google Cloud Vision тохиргоо ---
 # Файлын замыг өөрийн компьютер дээрх замаар солихыг анхаарна уу
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'c:\Users\User\OneDrive\Desktop\project\車A12.03\車A12.03\New folder\project-pjwork1-ai06bd-653e09464dee.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = r'key.json'
 client = vision.ImageAnnotatorClient()
 
 # --- Flask Routes ---
@@ -166,4 +166,5 @@ threading.Thread(target=camera_worker, daemon=True).start()
 if __name__ == '__main__':
     init_db()
     # use_reloader=False байх нь чухал, үгүй бол камерын thread хоёр удаа ажиллах магадлалтай
+
     app.run(debug=True, use_reloader=False)
