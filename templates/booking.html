@@ -1,1 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Portal | AI06 HOTEL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap');
+                
+        :root {
+            --primary: #1e1b4b;
+            --accent: #f59e0b;
+        }
 
+        body {
+            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+            color: #1e1b4b;
+            background: linear-gradient(rgba(193, 221, 249, 0.85), rgba(241, 245, 249, 0.85)), 
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 30px 60px -12px rgba(30, 27, 75, 0.2);
+        }
+
+        .premium-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(30, 27, 75, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .premium-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+            background: white;
+        }
+
+        /* Checkbox-ийн загвар */
+        .need-chip input:checked + label {
+            background: #1e1b4b !important;
+            color: white !important;
+            border-color: #1e1b4b !important;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-luxury {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            box-shadow: 0 10px 20px -5px rgba(30, 27, 75, 0.4);
+        }
+
+        .btn-arrival {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="nav-glass sticky top-0 w-full z-50 mb-8">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-indigo-950 rounded-lg flex items-center justify-center shadow-lg">
+                    <span class="text-sm">🏛️</span>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base tracking-tight text-indigo-950">AI06 HOTEL</h1>
+                    <p class="text-[7px] uppercase tracking-[0.2em] font-bold text-slate-500">Resort & Spa</p>
+                </div>
+            </div>
+            <div id="userBadge" class="hidden-section flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-950 border border-indigo-200">YT</div>
+            </div>
+            <div id="secureBadge" class="flex items-center gap-4 text-[10px] font-black text-indigo-900/60 uppercase tracking-widest">
+                <span class="flex items-center gap-1.5 text-green-600">
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                    セキュア接続
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-xl mx-auto pb-12 px-4">
+        
+        <!-- STEP 1: REGISTRATION FORM (Full Template) -->
+        <div id="registrationPage" class="glass-card rounded-[2.5rem] p-8 md:p-10 animate-fade-in">
+            <div class="mb-10 text-center">
+                <h1 class="text-3xl font-extrabold text-indigo-950 mb-2">事前チェックイン</h1>
+                <p class="text-slate-500 text-xs">ご到着をスムーズにするため、お客様情報のご入力をお願いいたします。</p>
+            </div>
+
+            <form class="space-y-6" action="{{ url_for('register') }}" method="POST">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-indigo-900/40 uppercase tracking-[0.2em] ml-1">Guest Name / お名前</label>
+                    <input type="text" name="name" required class="premium-input w-full p-4 rounded-2xl font-bold" placeholder="山田 太郎">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-indigo-900/40 uppercase tracking-[0.2em] ml-1">Phone / 電話番号</label>
+                    <input type="tel" name="phone" class="premium-input w-full p-4 rounded-2xl" placeholder="090-0000-0000">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-indigo-900/40 uppercase tracking-[0.2em] ml-1">Car Plate / 車両番号</label>
+                    <div class="grid grid-cols-4 gap-2 mb-2">
+                        <input type="text" name="carArea" class="premium-input p-3 rounded-xl text-center text-sm" placeholder="品川" title="地域">
+                        <input type="text" name="carClass" class="premium-input p-3 rounded-xl text-center text-sm" placeholder="300" title="分類番号">
+                        <input type="text" name="carKana" class="premium-input p-3 rounded-xl text-center text-sm" placeholder="あ" title="ひらがな">
+                        <input type="text" name="carNumber" required class="premium-input p-3 rounded-xl text-center text-sm font-bold" placeholder="12-34" title="一連番号">
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-4">
+                    <label class="text-[10px] font-black text-indigo-900/40 uppercase tracking-[0.2em] ml-1">Special Needs / ご要望</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="need-chip">
+                            <input type="checkbox" name="needs" value="wheelchair" id="n1" class="hidden">
+                            <label for="n1" class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-white text-[11px] font-bold cursor-pointer transition-all">
+                                ♿ <span>車椅子 (Wheelchair)</span>
+                            </label>
+                        </div>
+                        <div class="need-chip">
+                            <input type="checkbox" name="needs" value="crib" id="n2" class="hidden">
+                            <label for="n2" class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-white text-[11px] font-bold cursor-pointer transition-all">
+                                👶 <span>ベビーベッド (Crib)</span>
+                            </label>
+                        </div>
+                        <div class="need-chip">
+                            <input type="checkbox" name="needs" value="elderly" id="n3" class="hidden">
+                            <label for="n3" class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 bg-white text-[11px] font-bold cursor-pointer transition-all">
+                                👴 <span>高齢者サポート (Care)</span>
+                            </label>
+                        </div>
+                        <div class="need-chip">
+                            <input type="checkbox" id="otherToggle" class="hidden" onchange="document.getElementById('otherOptions').classList.toggle('hidden')">
+                            <label for="otherToggle" class="flex items-center gap-2 p-3 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-600 text-[11px] font-bold cursor-pointer transition-all">
+                                ✨ <span>その他 (Others...)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="otherOptions" class="hidden space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                        <textarea name="other_requests" class="premium-input w-full p-3 rounded-xl text-xs h-20" placeholder="具体的なご要望があれば入力してください..."></textarea>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-600">👑</div>
+                            <div>
+                                <h4 class="font-bold text-sm text-indigo-950">VIP会員様</h4>
+                                <p class="text-[9px] text-amber-700 font-bold uppercase tracking-wider">専用ラウンジ利用特典</p>
+                            </div>
+                        </div>
+                        <input type="checkbox" name="vip" id="vipToggle" class="w-6 h-6 accent-amber-500 cursor-pointer" onchange="document.getElementById('vipNumberField').classList.toggle('hidden')">
+                    </div>
+
+                    <div id="vipNumberField" class="hidden space-y-2 bg-amber-50/50 p-5 rounded-2xl border border-amber-200">
+                        <label class="text-[10px] font-black text-amber-700 uppercase tracking-widest">VIP会員番号</label>
+                        <input type="text" name="vip_number" class="premium-input w-full p-4 rounded-xl font-mono text-center tracking-widest text-indigo-950 border-amber-200" placeholder="VIP-000-000">
+                        <p class="mt-1 text-[9px] text-amber-600">* 特典適用のために会員番号をご入力ください。</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-luxury w-full py-5 rounded-2xl text-white font-extrabold tracking-widest uppercase text-xs shadow-lg hover:shadow-indigo-500/20 transition-all active:scale-[0.98]">
+                    情報を登録する
+                </button>
+             
+            </form>
+        </div>
+
+        <!-- STEP 2: SUCCESS MESSAGE -->
+        <div id="successOverlay" class="hidden glass-card rounded-[2.5rem] p-12 text-center animate-fade-in">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">✓</div>
+            <h2 class="text-2xl font-extrabold text-indigo-950 mb-2">登録完了</h2>
+            <p class="text-slate-500 text-sm">ご登録ありがとうございました。<br>管理画面へ移動します...</p>
+        </div>
+
+        <!-- STEP 3: USER MANAGEMENT PAGE -->
+        <div id="managementPage" class="hidden glass-card rounded-[2.5rem] p-8 md:p-10 overflow-hidden relative animate-fade-in">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-full -mr-10 -mt-10"></div>
+            <div class="mb-8">
+                <div class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold uppercase tracking-widest mb-4">Reservation Info</div>
+                <h1 class="text-2xl font-extrabold text-indigo-950">こんにちは、<span id="displayUserName">山田 太郎</span> 様</h1>
+                <p class="text-slate-500 text-xs mt-1">ご滞在の管理と到着の通知がこちらで行えます。</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 mb-8">
+                <div class="bg-white/50 border border-slate-100 p-5 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-black text-indigo-900/40 uppercase tracking-widest mb-1">Current Vehicle</p>
+                        <p id="displayCarPlate" class="font-bold text-lg text-indigo-950">---</p>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-xl">🚗</div>
+                </div>
+                <div class="bg-white/50 border border-slate-100 p-5 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-black text-indigo-900/40 uppercase tracking-widest mb-1">Status</p>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                            <p class="font-bold text-lg text-green-600">まもなく到着</p>
+                        </div>
+                    </div>
+                    <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-xl">🛎️</div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <button type="button" class="btn-arrival bg-amber-500 w-full py-6 rounded-3xl text-white flex flex-col items-center justify-center gap-1 group active:scale-[0.98] transition-all shadow-lg shadow-amber-500/20">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="font-black tracking-widest uppercase text-sm">15分後に到着します</span>
+                    </div>
+                    <span class="text-[9px] opacity-80 font-medium tracking-wide">Notify hotel staff of your arrival</span>
+                </button>
+            </div>
+        </div>
+        
+        <p class="text-center mt-8 text-[10px] text-indigo-950/60 uppercase tracking-[0.3em] font-bold">
+            AI06 Hotel & Resort • Secure Guest Access
+        </p>
+    </div>
+
+    <script>
+        function toggleOther() {
+            const container = document.getElementById('otherOptions');
+            const toggle = document.getElementById('otherToggle');
+            container.classList.toggle('hidden', !toggle.checked);
+        }
+
+        function toggleVIP() {
+            const vipField = document.getElementById('vipNumberField');
+            const vipToggle = document.getElementById('vipToggle');
+            const vipInput = document.getElementById('vipInput');
+            
+            if (vipToggle.checked) {
+                vipField.classList.remove('hidden');
+                vipInput.focus();
+            } else {
+                vipField.classList.add('hidden');
+                vipInput.value = ''; 
+            }
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('guestName').value;
+            const vipToggle = document.getElementById('vipToggle');
+            const vipInput = document.getElementById('vipInput');
+
+            if (vipToggle.checked && !vipInput.value.trim()) {
+                alert('VIP会員番号を入力してください。');
+                vipInput.focus();
+                return;
+            }
+
+            // Plate formatting
+            const carPlate = `${document.getElementById('carArea').value} ${document.getElementById('carClass').value} ${document.getElementById('carKana').value} ${document.getElementById('carNumber').value}`;
+            
+            document.getElementById('displayUserName').textContent = name;
+            document.getElementById('displayCarPlate').textContent = carPlate;
+
+            // Page transitions
+            const regPage = document.getElementById('registrationPage');
+            const successPage = document.getElementById('successOverlay');
+            const managePage = document.getElementById('managementPage');
+            const userBadge = document.getElementById('userBadge');
+            const secureBadge = document.getElementById('secureBadge');
+
+            regPage.classList.add('hidden');
+            successPage.classList.remove('hidden');
+
+            setTimeout(() => {
+                successPage.classList.add('hidden');
+                managePage.classList.remove('hidden');
+                userBadge.classList.remove('hidden');
+                secureBadge.classList.add('hidden');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
